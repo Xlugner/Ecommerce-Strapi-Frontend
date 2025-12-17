@@ -1,0 +1,29 @@
+---
+import type { Category } from "../../lib/strapi";
+
+interface Props {
+  categories: Category[];
+}
+
+const { categories } = Astro.props;
+---
+
+<div class="mb-8">
+  <h2 class="text-2xl font-bold text-neutral-800 mb-4">Categorías</h2>
+  <div class="flex space-x-4 overflow-x-auto pb-4">
+    <button
+      class="category-filter bg-neutral-900 text-white px-4 py-2 rounded-full whitespace-nowrap"
+      data-slug="all">Todas</button
+    >
+    {
+      categories.map((category) => (
+        <button
+          class="category-filter bg-white text-neutral-700 px-4 py-2 rounded-full whitespace-nowrap border border-neutral-300 hover:bg-neutral-200 transition-colors"
+          data-slug={category.slug}
+        >
+          {category.name}
+        </button>
+      ))
+    }
+  </div>
+</div>

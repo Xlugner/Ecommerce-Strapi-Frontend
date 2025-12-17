@@ -1,0 +1,101 @@
+---
+import { getStrapiMedia } from "../../lib/strapi";
+import { AddToCartButton } from "../react/AddToCartButton";
+import type { Product } from "../../lib/strapi";
+
+interface Props {
+  product: Product;
+}
+
+const { product } = Astro.props;
+const { name, price, slug, description, image } = product;
+const imageUrl = getStrapiMedia(image?.[0]?.url);
+
+// Preparar datos para el botón de añadir al carrito
+const cartItem = {
+  id: product.id,
+  name,
+  price,
+  slug,
+  description,
+  image: imageUrl,
+};
+---
+
+<!--
+  COMPONENTE: ProductCard (Vertical)
+  
+  Tarjeta vertical para grid de productos
+  Muestra badge "Más Vendido" si está marcado como featured
+-->
+<div
+  class="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow"
+>
+  <a href={`/productos/${slug}`} class="block relative">
+    <!-- Badge "Más Vendido" -->
+    {
+      product.featured && (
+        <div class="absolute top-2 left-2 z-10">
+          <span class="bg-gray-800 text-white text-xs font-bold px-3 py-1 rounded-md">
+            Más Vendido
+          </span>
+        </div>
+      )
+    }
+
+    <!-- Imagen del producto -->
+    <div class="aspect-square overflow-hidden bg-neutral-100">
+      <img
+        src={imageUrl}
+        alt={name}
+        class="w-full h-full object-contain p-4 hover:scale-105 transition-transform duration-300"
+        loading="lazy"
+      />
+    </div>
+  </a>
+
+  <!-- Información del producto -->
+  <div class="p-4">
+    <a href={`/productos/${slug}`}>
+      <h3
+        class="text-neutral-800 font-semibold text-sm mb-1 line-clamp-2 hover:text-neutral-700 transition-colors"
+      >
+        {name}
+      </h3>
+    </a>
+
+    <p class="text-neutral-500 text-xs mb-3 h-6 overflow-hidden">
+      {
+        description && description.length > 80
+          ? description.substring(0, 70) + "..."
+          : description
+      }
+    </p>
+
+    <!-- Precios -->
+    <div class="flex items-center gap-2 mb-3">
+      <span class="text-neutral-900 font-bold text-lg">
+        $ {price.toLocaleString()}
+      </span>
+    </div>
+
+    <!-- Botón de añadir al carrito (React Island) -->
+    <AddToCartButton client:load product={cartItem} />
+  </div>
+</div>
+
+<style>
+  .line-clamp-1 {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>

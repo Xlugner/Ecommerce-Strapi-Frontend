@@ -1,0 +1,33 @@
+---
+import { getFeaturedProducts } from "../../lib/strapi";
+import ProductCard from "./ProductCard.astro";
+const featuredProducts = await getFeaturedProducts();
+---
+
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+  <div class="text-center mb-12">
+    <h2 class="text-3xl font-bold text-neutral-800 mb-4">
+      Productos Destacados
+    </h2>
+    <p class="text-neutral-700">Los más populares de nuestra colección</p>
+  </div>
+
+  {
+    featuredProducts && featuredProducts.length > 0 ? (
+      <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        {featuredProducts.map((product: any) => (
+          <ProductCard product={product} />
+        ))}
+      </div>
+    ) : (
+      <div class="text-center py-12">
+        <p class="text-neutral-500 text-lg">
+          No hay productos destacados disponibles.
+        </p>
+        <p class="text-neutral-400 mt-2">
+          Configura productos como "destacados" en Strapi.
+        </p>
+      </div>
+    )
+  }
+</section>

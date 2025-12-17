@@ -1,0 +1,47 @@
+---
+import "../styles/global.css";
+import Footer from "../components/astro/Footer.astro";
+import Header from "../components/astro/Header.astro";
+import { FloatingButtons } from "../components/react/FloatingButton";
+import { CartWrapper } from "../components/react/CartWrapper";
+import { getStoreConfig } from "../lib/strapi";
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = "Tu tienda online" } = Astro.props;
+const storeConfig = await getStoreConfig();
+const storeName =
+  storeConfig?.storeName || import.meta.env.PUBLIC_STORE_NAME || "Mi Tienda";
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content={description} />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title} | {storeName}</title>
+  </head>
+  <body class="bg-neutral-50 text-neutral-700">
+    <!-- Header -->
+    <Header />
+
+    <!-- Contenido principal -->
+    <main class="min-h-screen">
+      <slot />
+    </main>
+
+    <!-- Footer -->
+    <Footer />
+
+    <!-- Carrito Modal -->
+    <CartWrapper client:load />
+
+    <!-- Botones Flotantes -->
+    <FloatingButtons client:load />
+  </body>
+</html>
