@@ -83,7 +83,7 @@ export const CheckoutForm = () => {
           <input type="text" name="ci" id="ci" value={formData.ci} onChange={handleInputChange} required className="mt-1 block w-full border-neutral-300 rounded-md shadow-sm focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50" />
         </div>
         <div>
-          <label htmlFor="address" className="block text-sm font-medium text-neutral-700">Dirección</label>
+          <label htmlFor="address" className="block text-sm font-medium text-neutral-700">Dirección de entrega</label>
           <input type="text" name="address" id="address" value={formData.address} onChange={handleInputChange} required className="mt-1 block w-full border-neutral-300 rounded-md shadow-sm focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50" />
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

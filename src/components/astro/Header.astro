@@ -96,7 +96,7 @@ const logoUrl = getStrapiMedia(storeConfig?.logo?.url);
         type="text"
         id="searchInput"
         placeholder="Buscar productos..."
-        class="w-full pl-12 pr-4 py-3 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-neutral-700"
+        class="w-full pl-12 pr-12 py-3 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-neutral-700"
       />
       <svg
         class="w-5 h-5 text-neutral-400 absolute left-4 top-1/2 -translate-y-1/2"
@@ -109,6 +109,18 @@ const logoUrl = getStrapiMedia(storeConfig?.logo?.url);
       >
         <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
       </svg>
+      <button
+        id="searchSubmitBtn"
+        class="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-primary transition-colors"
+        aria-label="Buscar"
+      >
+        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+          <path
+            fill-rule="evenodd"
+            d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+            clip-rule="evenodd"></path>
+        </svg>
+      </button>
     </div>
   </div>
 </div>
@@ -117,9 +129,21 @@ const logoUrl = getStrapiMedia(storeConfig?.logo?.url);
   // Toggle barra de búsqueda
   const searchButton = document.getElementById("searchButton");
   const searchBar = document.getElementById("searchBar");
-  const searchInput = document.getElementById("searchInput");
+  const searchInput = document.getElementById(
+    "searchInput",
+  ) as HTMLInputElement;
+  const searchSubmitBtn = document.getElementById("searchSubmitBtn");
 
-  if (searchButton && searchBar && searchInput) {
+  // Función para ejecutar búsqueda
+  const performSearch = () => {
+    const query = searchInput.value.trim();
+    if (query) {
+      window.location.href = `/productos?search=${encodeURIComponent(query)}`;
+    }
+  };
+
+  if (searchButton && searchBar && searchInput && searchSubmitBtn) {
+    // Toggle barra de búsqueda
     searchButton.addEventListener("click", () => {
       const isOpen =
         searchBar.style.maxHeight && searchBar.style.maxHeight !== "0px";
@@ -133,11 +157,17 @@ const logoUrl = getStrapiMedia(storeConfig?.logo?.url);
       }
     });
 
-    // Buscar productos (puedes conectar esto con tu lógica)
-    searchInput.addEventListener("input", (e) => {
-      const query = (e.target as HTMLInputElement).value;
-      console.log("Buscando:", query);
-      // Aquí puedes implementar la búsqueda real
+    // Buscar al presionar Enter
+    searchInput.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") {
+        performSearch();
+      }
+    });
+
+    // Buscar al hacer clic en el botón
+    searchSubmitBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      performSearch();
     });
 
     // Cerrar al hacer clic fuera

@@ -6,27 +6,65 @@ import CategoryCarousel from "../components/astro/CategoryCarousel.astro";
 
 const products = await getProducts();
 const categories = await getCategories();
+
+// Obtener parámetro de búsqueda de la URL
+const search = Astro.url.searchParams.get("search");
+const searchQuery = search ? search.toLowerCase() : "";
+
+// Filtrar productos por búsqueda si existe
+const filteredProducts = searchQuery
+  ? products.filter((product) =>
+      product.name.toLowerCase().includes(searchQuery),
+    )
+  : products;
 ---
 
-<Layout title="Productos">
+<Layout title={searchQuery ? `Resultados: ${search}` : "Productos"}>
   <div class="container mx-auto px-4 py-8">
-    <h1 class="text-4xl font-bold text-neutral-800 mb-8">Nuestros Productos</h1>
+    <h1 class="text-4xl font-bold text-neutral-800 mb-2">
+      {
+        searchQuery
+          ? `Resultados de búsqueda: "${search}"`
+          : "Nuestros Productos"
+      }
+    </h1>
 
-    <CategoryCarousel categories={categories} />
+    {
+      searchQuery && (
+        <p class="text-neutral-600 mb-8">
+          Se encontraron {filteredProducts.length} producto
+          {filteredProducts.length !== 1 ? "s" : ""}
+        </p>
+      )
+    }
+
+    {!searchQuery && <CategoryCarousel categories={categories} />}
 
     <div
       id="product-list"
       class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
     >
       {
-        products.map((product) => (
-          <div
-            class="product-item"
-            data-category={product.category?.slug || ""}
-          >
-            <ProductCard product={product} />
+        filteredProducts.length > 0 ? (
+          filteredProducts.map((product) => (
+            <div
+              class="product-item"
+              data-category={product.category?.slug || ""}
+            >
+              <ProductCard product={product} />
+            </div>
+          ))
+        ) : (
+          <div class="col-span-full text-center py-12">
+            <p class="text-neutral-500 text-lg">No se encontraron productos.</p>
+            <a
+              href="/productos"
+              class="text-primary hover:underline mt-2 inline-block"
+            >
+              Ver todos los productos
+            </a>
           </div>
-        ))
+        )
       }
     </div>
   </div>
@@ -34,9 +72,15 @@ const categories = await getCategories();
 
 <script>
   document.addEventListener("DOMContentLoaded", () => {
+    // No filtrar por categoría si hay búsqueda activa
+    const params = new URLSearchParams(window.location.search);
+    const hasSearch = params.has("search");
+
+    if (hasSearch) return; // Si hay búsqueda, no mostrar filtros de categoría
+
     const filterButtons = document.querySelectorAll(".category-filter");
     const productItems = document.querySelectorAll(
-      ".product-item"
+      ".product-item",
     ) as NodeListOf<HTMLElement>;
 
     filterButtons.forEach((button) => {
@@ -50,7 +94,7 @@ const categories = await getCategories();
             "bg-white",
             "text-neutral",
             "border",
-            "border-neutral-300"
+            "border-neutral-300",
           );
         });
         button.classList.add("bg-neutral-900", "text-white");
@@ -58,7 +102,7 @@ const categories = await getCategories();
           "bg-white",
           "text-neutral-400",
           "border",
-          "border-neutral-300"
+          "border-neutral-300",
         );
 
         // Filtrado de productos
