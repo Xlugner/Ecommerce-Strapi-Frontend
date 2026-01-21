@@ -18,9 +18,8 @@ const storeLocation =
   "Salta argentina";
 const logoUrl = getStrapiMedia(storeConfig?.logo?.url);
 
-// Productos destacados para el footer (estos deberían venir de Strapi)
+// Productos destacados para el footer
 const featuredProducts = await getFeaturedProducts();
-const featuredProductNames = featuredProducts.map((product) => product.name);
 ---
 
 <footer class="bg-neutral-900 text-white mt-20">
@@ -169,16 +168,18 @@ const featuredProductNames = featuredProducts.map((product) => product.name);
       <div>
         <h3 class="text-lg font-bold mb-4">Productos</h3>
         <ul class="space-y-2 mb-6">
-          {featuredProductNames.map((productName) => (
-      <li class="hover:bg-neutral-100/50 px-2 py-1 rounded transition-colors">
-        <a
-          href={`/productos/${productName.toLowerCase().replace(/\s+/g, '-')}`}
-          class="hover:opacity-80 transition-opacity text-sm"
-        >
-          {productName}
-        </a>
-      </li>
-    ))}
+          {
+            featuredProducts.map((product) => (
+              <li class="hover:bg-neutral-100/50 px-2 py-1 rounded transition-colors">
+                <a
+                  href={`/productos/${product.slug}`}
+                  class="hover:opacity-80 transition-opacity text-sm"
+                >
+                  {product.name}
+                </a>
+              </li>
+            ))
+          }
         </ul>
 
         <!-- Botón Dashboard (opcional, para admin) -->
