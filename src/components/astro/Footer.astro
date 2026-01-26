@@ -7,15 +7,15 @@ import {
 
 const storeConfig = await getStoreConfig();
 const storeName =
-  storeConfig?.storeName || import.meta.env.PUBLIC_STORE_NAME || "Indumentaria";
+  storeConfig?.storeName || import.meta.env.PUBLIC_STORE_NAME || "Mi Tienda";
 const storeEmail =
   storeConfig?.email || import.meta.env.PUBLIC_STORE_EMAIL || "admin@gmail.com";
 const storePhone =
-  storeConfig?.phone || import.meta.env.PUBLIC_STORE_PHONE || "543875683101";
+  storeConfig?.phone || import.meta.env.PUBLIC_STORE_PHONE || "58014616";
 const storeLocation =
   storeConfig?.address ||
   import.meta.env.PUBLIC_STORE_LOCATION ||
-  "Salta argentina";
+  "Bayamo";
 const logoUrl = getStrapiMedia(storeConfig?.logo?.url);
 
 // Productos destacados para el footer
@@ -204,7 +204,7 @@ const featuredProducts = await getFeaturedProducts();
                 d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
               ></path>
             </svg>
-            Dashboard
+            Admin
           </a>
         </div>
       </div>
