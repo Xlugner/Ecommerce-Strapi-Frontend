@@ -11,14 +11,18 @@ const featuredProducts = await getFeaturedProducts();
     </h2>
     <p class="text-neutral-700">Los más populares de nuestra colección</p>
   </div>
-
   {
     featuredProducts && featuredProducts.length > 0 ? (
       <>
-        <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {featuredProducts.map((product: any) => (
-            <ProductCard product={product} />
-          ))}
+        {/* Contenedor con scroll horizontal */}
+        <div class="overflow-x-auto scrollbar-hide pb-4">
+          <div class="flex gap-6 min-w-min px-2">
+            {featuredProducts.map((product: any) => (
+              <div class="flex-none w-[280px] sm:w-[300px]">
+                <ProductCard product={product} />
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Botón Ver Todos */}
@@ -43,3 +47,26 @@ const featuredProducts = await getFeaturedProducts();
     )
   }
 </section>
+
+<style>
+  /* Ocultar scrollbar pero mantener funcionalidad */
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  /* Asegurar que las tarjetas tengan el mismo alto */
+  .flex-none {
+    display: flex;
+    flex-direction: column;
+  }
+  /* Pequeño espacio en los bordes para mejor visualización */
+  @media (min-width: 640px) {
+    .px-2 {
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+  }
+</style>
